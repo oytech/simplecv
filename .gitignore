@@ -1,0 +1,7 @@
+### LaTeX ###
+*.aux
+*.log
+*.out
+
+### Mac OS ###
+.DS_Store
