@@ -1,0 +1,119 @@
+\documentclass{simplecv}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,urlcolor=RoyalBlue]{hyperref}
+\usepackage{enumitem}
+\usepackage{soulutf8}
+\usepackage{fontawesome}
+
+\setlist[itemize]{noitemsep,topsep=0pt}
+
+\renewcommand{\cvfirstname}{Wojciech}
+\renewcommand{\cvlastname}{Oytech}
+
+\newcommand{\at}{{\fontfamily{ptm}\selectfont @}}
+\newcommand{\email}{\href{mailto:email@example.com}{email\at example.com}}
+
+\newcommand{\github}{\href{https://github.com/oytech}{github.com/oytech}}
+
+\newcommand{\simplecv}{\href{https://github.com/oytech/simplecv}{github.com/oytech/simplecv}}
+
+
+\newcommand{\company}{\href{example.com}{Example Company Inc.}}
+\newcommand{\othercompany}{\href{example.com}{Other Company Inc.}}
+
+
+\begin{document}
+  \cvheader
+
+  ~
+
+  \cvsection{About me}
+  \cvmain{
+    \faGithub~\github \hfill \faEnvelopeO~\email
+  }
+
+  ~
+
+  \cvmain{
+    I am an example \textbf{software developer with X years of experience}.
+    I have a proven track record working both in a team and as an independent contributor.
+  }
+
+  ~
+
+  \cvsection{Skills}
+
+  \cvhints{
+    \textbf{Programming}
+  }
+  \cvmain{
+    Language X, Framework Y, Library Z
+  }
+
+  \cvhints{
+    \textbf{Other}
+  }
+  \cvmain{
+    Git Github
+  }
+
+  ~
+
+  \cvsection{Open Source}
+
+  \cvmain{
+    \simplecv~- Simple CV LaTeX template.
+  }
+
+  ~
+
+  \cvsection{Experience}
+
+  \cvmain{
+    {\large \company}
+  }
+
+  \cvhints{
+    \textbf{4 months}
+  }
+  \cvmain{
+    \textbf{Software Developer}
+  }
+
+  \cvhints{
+     2025-01 - 2025-04
+  }
+  \cvmain{
+  	Working on another secret project  (\textit{Language X, Framework Y, Library Z}).
+
+	\faStarO~Some example achievement.
+  }
+
+  ~
+
+  \cvmain{
+    {\large \othercompany}
+  }
+
+  \cvhints{
+    \textbf{X years}
+  }
+  \cvmain{
+    \textbf{Software Developer}
+  }
+
+  \cvmain{
+    Member of secret internal team:
+    \begin{itemize}
+        \item done A
+        \item done B
+        \item resposible for C
+    \end{itemize}
+	\faStarO~Something I'm proud of.
+  }
+
+  \cvfooter{
+    Here goes footer
+  }
+\end{document}
