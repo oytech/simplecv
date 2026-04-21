@@ -4,20 +4,23 @@
 \usepackage[colorlinks=true,urlcolor=RoyalBlue]{hyperref}
 \usepackage{enumitem}
 \usepackage{soulutf8}
-\usepackage{fontawesome}
+\usepackage{fontawesome7}
 
 \setlist[itemize]{noitemsep,topsep=0pt}
 
 \renewcommand{\cvfirstname}{Wojciech}
 \renewcommand{\cvlastname}{Oytech}
 
-\newcommand{\at}{{\fontfamily{ptm}\selectfont @}}
-\newcommand{\email}{\href{mailto:email@example.com}{email\at example.com}}
+\newcommand{\cvstar}{\faIcon[regular]{star}}
 
-\newcommand{\github}{\href{https://github.com/oytech}{github.com/oytech}}
+\newcommand{\at}{{\fontfamily{ptm}\selectfont @}}
+\newcommand{\email}{\faIcon[regular]{envelope}~\href{mailto:email@example.com}{email\at example.com}}
+
+\newcommand{\github}{\faIcon{github}~\href{https://github.com/oytech}{github.com/oytech}}
+
+\newcommand{\phone}{\faIcon{phone}~\href{tel:1234567890}{(123) 456-7890}}
 
 \newcommand{\simplecv}{\href{https://github.com/oytech/simplecv}{github.com/oytech/simplecv}}
-
 
 \newcommand{\company}{\href{example.com}{Example Company Inc.}}
 \newcommand{\othercompany}{\href{example.com}{Other Company Inc.}}
@@ -30,7 +33,7 @@
 
   \cvsection{About me}
   \cvmain{
-    \faGithub~\github \hfill \faEnvelopeO~\email
+    \email \hfill \github \hfill \phone
   }
 
   ~
@@ -63,7 +66,7 @@
   \cvsection{Open Source}
 
   \cvmain{
-    \simplecv~- Simple CV LaTeX template.
+    \simplecv~Simple CV LaTeX template.
   }
 
   ~
@@ -87,7 +90,7 @@
   \cvmain{
   	Working on another secret project  (\textit{Language X, Framework Y, Library Z}).
 
-	\faStarO~Some example achievement.
+	\cvstar~Some example achievement.
   }
 
   ~
@@ -110,7 +113,7 @@
         \item done B
         \item responsible for C
     \end{itemize}
-	\faStarO~Something I'm proud of.
+	\cvstar~Something I'm proud of.
   }
 
   \cvfooter{
