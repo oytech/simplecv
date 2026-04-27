@@ -1,0 +1,46 @@
+\documentclass{simplecv}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage[colorlinks=true,urlcolor=RoyalBlue]{hyperref}
+\usepackage{enumitem}
+\usepackage{soul}
+\usepackage{fontawesome7}
+\usepackage{newunicodechar}
+
+\setlist[itemize]{noitemsep,topsep=0pt}
+
+% TODO find out if some implementation might be handy
+% pandoc default latex template defines it, generated latex may use it
+\def\tightlist{}
+
+% TODO is there latex package for that?
+% allow html special characters for spaces to be used in markdown:
+% &nbsp;
+% pandoc on its own translates &nbsp; to ~
+% &ensp;
+\DeclareUnicodeCharacter{2002}{\enspace}
+% &emsp;
+\DeclareUnicodeCharacter{2003}{\quad}
+%\newunicodechar{ }{\quad}
+% &thinsp;
+\DeclareUnicodeCharacter{2009}{\,}
+
+$if(firstname)$
+\renewcommand{\cvfirstname}{$firstname$}
+$endif$
+
+$if(lastname)$
+\renewcommand{\cvlastname}{$lastname$}
+$endif$
+
+\begin{document}
+
+$if(firstname)$
+$if(lastname)$
+\cvheader
+$endif$
+$endif$
+
+$body$
+
+\end{document}
