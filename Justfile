@@ -13,7 +13,7 @@ tex:
         -t latex \
         --template=pandoc/template.tex \
         --lua-filter=pandoc/simplecv.lua \
-        example.md -o test.tex
+        example.md -o example.tex
 
 ast:
     pandoc \

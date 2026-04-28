@@ -5,118 +5,178 @@
 \usepackage{enumitem}
 \usepackage{soul}
 \usepackage{fontawesome7}
+\usepackage{newunicodechar}
 
 \setlist[itemize]{noitemsep,topsep=0pt}
 
-\renewcommand{\cvfirstname}{Wojciech}
-\renewcommand{\cvlastname}{Oytech}
+% TODO find out if some implementation might be handy
+% pandoc default latex template defines it, generated latex may use it
+\def\tightlist{}
 
-\newcommand{\cvstar}{\faIcon[regular]{star}}
+% TODO is there latex package for that?
+% allow html special characters for spaces to be used in markdown:
+% &nbsp;
+% pandoc on its own translates &nbsp; to ~
+% &ensp;
+\DeclareUnicodeCharacter{2002}{\enspace}
+% &emsp;
+\DeclareUnicodeCharacter{2003}{\quad}
+%\newunicodechar{ }{\quad}
+% &thinsp;
+\DeclareUnicodeCharacter{2009}{\,}
 
-\newcommand{\at}{{\fontfamily{ptm}\selectfont @}}
-\newcommand{\email}{\faIcon[regular]{envelope}~\href{mailto:email@example.com}{email\at example.com}}
+\renewcommand{\cvfirstname}{Dwight}
 
-\newcommand{\github}{\faIcon{github}~\href{https://github.com/oytech}{github.com/oytech}}
-
-\newcommand{\phone}{\faIcon{phone}~\href{tel:1234567890}{(123) 456-7890}}
-
-\newcommand{\simplecv}{\href{https://github.com/oytech/simplecv}{github.com/oytech/simplecv}}
-
-\newcommand{\company}{\href{example.com}{Example Company Inc.}}
-\newcommand{\othercompany}{\href{example.com}{Other Company Inc.}}
-
+\renewcommand{\cvlastname}{Schrute}
 
 \begin{document}
-  \cvheader
 
-  ~
+\cvheader
 
-  \cvsection{About me}
-  \cvmain{
-    \email \hfill \github \hfill \phone
-  }
+\vspace{\baselineskip}
 
-  ~
+\cvsection{About}%
+\cvmain{
 
-  \cvmain{
-    I am an example \textbf{software developer with X years of experience}.
-    I have a proven track record working both in a team and as an independent contributor.
-  }
+\faIcon[regular]{envelope}
+\href{mailto:dwight.schrute@example.com}{\nolinkurl{dwight.schrute@example.com}}
+  \faIcon{phone} \href{tel:1234567890}{(123) 456-7890}
 
-  ~
+}
 
-  \cvsection{Skills}
+\cvmain{
 
-  \cvhints{
-    \textbf{Programming}
-  }
-  \cvmain{
-    Language X, Framework Y, Library Z
-  }
+~
 
-  \cvhints{
-    \textbf{Other}
-  }
-  \cvmain{
-    Git, Github
-  }
+}
 
-  ~
+\cvmain{
 
-  \cvsection{Open Source}
+Whenever I'm about to do something, I think, \emph{Would an idiot do
+that?} And if they would, I~do not do that thing.
 
-  \cvmain{
-    \simplecv~Simple CV LaTeX template.
-  }
+}
 
-  ~
+\vspace{\baselineskip}
 
-  \cvsection{Experience}
+\cvsection{Traits}
 
-  \cvmain{
-    {\large \company}
-  }
+\cvmain{
 
-  \cvhints{
-    \textbf{4 months}
-  }
-  \cvmain{
-    \textbf{Software Developer}
-  }
+hardworking, alpha male, jackhammer, merciless, insatiable
 
-  \cvhints{
-     2025-01 - 2025-04
-  }
-  \cvmain{
-  	Working on another secret project  (\textit{Language X, Framework Y, Library Z}).
+}
 
-	\cvstar~Some example achievement.
-  }
+\vspace{\baselineskip}
 
-  ~
+\cvsection{Experience}
 
-  \cvmain{
-    {\large \othercompany}
-  }
+\cvmain{{\large
 
-  \cvhints{
-    \textbf{X years}
-  }
-  \cvmain{
-    \textbf{Software Developer}
-  }
+\href{https://theoffice.fandom.com/wiki/Schrute_Farms}{Schrute Farms}
 
-  \cvmain{
-    Member of secret internal team:
-    \begin{itemize}
-        \item done A
-        \item done B
-        \item responsible for C
-    \end{itemize}
-	\cvstar~Something I'm proud of.
-  }
+}}
 
-  \cvfooter{
-    Here goes footer
-  }
+\cvhints{
+
+present
+
+}%
+\cvmain{
+
+\textbf{Proprietor}
+
+}
+
+\cvmain{
+
+Running family beets farm and managing day-to-day operations of
+agrotourist attraction offering:
+
+}
+
+\cvmain{
+
+\begin{itemize}
+\tightlist
+\item
+  B\&B
+\item
+  Beet Planting
+\item
+  Mattress Making
+\item
+  Beet Wine Classes
+\end{itemize}
+
+}
+
+\vspace{\baselineskip}
+
+\cvmain{{\large
+
+\href{https://en.wikipedia.org/wiki/Dunder_Mifflin}{Dunder Mifflin Paper
+Company, Inc.}
+
+}}
+
+\cvhints{
+
+2005 - 2007
+
+}%
+\cvmain{
+
+\textbf{Assistant to the Regional Manager}
+
+}
+
+\cvhints{
+
+4/1997 - 2007
+
+}%
+\cvmain{
+
+\textbf{Salesman}
+
+}
+
+\cvmain{
+
+My time spent at Dunder Mifflin was very enjoying. I had the opportunity
+to learn from an experienced and talented boss. My branch consistently
+was one of the top sellers of the company.
+
+}
+
+\vspace{\baselineskip}
+
+\cvsection{Education}
+
+\cvmain{{\large
+
+\href{https://en.wikipedia.org/wiki/Penn_State_Shenango}{Penn State
+Shenango}
+
+}}
+
+\cvhints{
+
+1988 - 1992
+
+}%
+\cvmain{
+
+BA Business Management
+
+}
+
+\cvfooter{
+
+Additional resumes (Athletic and Special Skills, Dwight Schrute Trivia)
+are available per request.
+
+}
+
 \end{document}
