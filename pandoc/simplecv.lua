@@ -3,28 +3,17 @@ function string:is_empty()
 end
 
 function string:starts_with(str)
-    if string.is_empty(self) or string.is_empty(str) then
-        return false
-    else
-        return self:sub(1, #str) == str
-    end
+    return not (string.is_empty(self) or string.is_empty(str)) and self:sub(1, #str) == str
 end
 
 function string:ends_with(str)
-    if string.is_empty(self) or string.is_empty(str) then
-        return false
-    else
-        return self:sub(-#str) == str
-    end
+    return not (string.is_empty(self) or string.is_empty(str)) and self:sub(-#str) == str
 end
 
 function table:append(other)
-    assert(type(self) == "table")
-    assert(type(other) == "table")
+    assert(type(self) == "table" and type(other) == "table")
 
-    for _, val in ipairs(other) do
-        table.insert(self, val)
-    end
+    for _, val in ipairs(other) do table.insert(self, val) end
 end
 
 function table:contains(elem)
