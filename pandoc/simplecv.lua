@@ -47,18 +47,22 @@ function is_other_header(el) return el.t == "Header" and el.level ~= 1 end
 
 if FORMAT:match 'latex' then
 
+    ICONS = {}
+
     -- support syntax :icon: for inserting fontawesome icons:
     -- * substitute strings :name: with \\faIcon{name}
     -- * substitute strings :regular-name: with \\faIcon[regular]{name}
     function Str(str)
         local text = str.text
         if text:starts_with(":") and text:ends_with(":") and #text > 2 then
-            local emoji = text:sub(2, -2)
-            if emoji:starts_with("regular-") then
-                emoji = emoji:sub(9, #emoji)
-                return pandoc.RawInline("latex", "\\faIcon[regular]{" .. emoji .. "}")
+            local icon = text:sub(2, -2)
+            if icon:starts_with("regular-") then
+                icon = icon:sub(9, #icon)
+                table.insert(ICONS, icon)
+                return pandoc.RawInline("latex", "\\faIcon[regular]{" .. icon .. "}")
             else
-                return pandoc.RawInline("latex", "\\faIcon{" .. emoji .. "}")
+                table.insert(ICONS, icon)
+                return pandoc.RawInline("latex", "\\faIcon{" .. icon .. "}")
             end
         end
         return str
@@ -137,6 +141,7 @@ if FORMAT:match 'latex' then
             end
             prev = el
         end
+        doc.meta["icons"] = pandoc.MetaList(ICONS)
         return pandoc.Pandoc(hblocks, doc.meta)
     end
 

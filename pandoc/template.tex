@@ -33,6 +33,12 @@ $endif$
 % &thinsp;
 \DeclareUnicodeCharacter{2009}{\,}
 
+% prevent garbage characters from font awesome icons
+% in text extracted from pdf
+$for(icons)$
+\pdfglyphtounicode{$icons$}{0020}
+$endfor$
+
 $if(firstname)$
 \renewcommand{\cvfirstname}{$firstname$}
 $endif$
