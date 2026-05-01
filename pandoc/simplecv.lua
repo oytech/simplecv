@@ -41,9 +41,9 @@ function is_content(el)
     return table.contains({"Para", "BulletList", "OrderedList"}, el.t)
 end
 
-function is_top_header(el) return el.t == "Header" and el.level == 1 end
+function is_top_heading(el) return el.t == "Header" and el.level == 1 end
 
-function is_other_header(el) return el.t == "Header" and el.level ~= 1 end
+function is_other_heading(el) return el.t == "Header" and el.level ~= 1 end
 
 if FORMAT:match 'latex' then
 
@@ -82,7 +82,7 @@ if FORMAT:match 'latex' then
         local hblocks = {}
         -- assign dummy element to eliminate nil checks
         local prev = {t = "dummy"}
-        for _, el in ipairs(doc.blocks) do
+        for i, el in ipairs(doc.blocks) do
             -- insert "content" wrapped in cvmain immediately after cvhints
             -- to render side by side in pdf
             if is_hint(prev) and is_content(el) then
@@ -95,11 +95,12 @@ if FORMAT:match 'latex' then
                 })
             -- insert cvmain immediately after header wrapped in cvsection
             -- to render side by side in pdf
-            elseif is_top_header(prev) and is_main(el) then
-                local header = pandoc.utils.stringify(prev)
+            elseif is_top_heading(prev) and is_main(el) then
+                local heading = pandoc.utils.stringify(prev)
                 table.append(hblocks, {
                     pandoc.RawBlock("latex", "\\vspace{\\baselineskip}"),
-                    pandoc.RawBlock("latex", "\\cvsection{" .. header  .."}%\n\\cvmain{"),
+                    pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. i .. "}"),
+                    pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}%\n\\cvmain{"),
                     el,
                     pandoc.RawBlock("latex", "}")
                 })
@@ -108,18 +109,19 @@ if FORMAT:match 'latex' then
                 -- be skipped in previous iteration and not "merged" above
                 if is_hint(prev) then
                     table.append(hblocks, wrap("cvhints", prev))
-                elseif is_top_header(prev) then
-                    local header = pandoc.utils.stringify(prev)
+                elseif is_top_heading(prev) then
+                    local heading = pandoc.utils.stringify(prev)
                     table.append(hblocks, {
                         pandoc.RawBlock("latex", "\\vspace{\\baselineskip}"),
-                        pandoc.RawBlock("latex", "\\cvsection{" .. header .."}")
+                        pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. i .. "}"),
+                        pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}")
                     })
                 end
 
-                if is_top_header(el) or is_hint(el) then
+                if is_top_heading(el) or is_hint(el) then
                     -- skip for now to check for possible "merge" with next elem
                     ;
-                elseif is_other_header(el) then
+                elseif is_other_heading(el) then
                     -- insert vertical space before headers unless prev is level 1 header
                     -- (additional space is not needed then because
                     -- level 1 header is in different column)
