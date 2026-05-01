@@ -7,6 +7,14 @@
 \usepackage{fontawesome7}
 \usepackage{newunicodechar}
 
+$if(firstname)$
+$if(lastname)$
+\hypersetup{
+  pdftitle={$lastname$ $firstname$ CV},
+}
+$endif$
+$endif$
+
 \setlist[itemize]{noitemsep,topsep=0pt}
 
 % TODO find out if some implementation might be handy
