@@ -1,11 +1,15 @@
 \documentclass{simplecv}
 
 \usepackage[dvipsnames]{xcolor}
-\usepackage[colorlinks=true,urlcolor=RoyalBlue]{hyperref}
+\usepackage[colorlinks=true,urlcolor=RoyalBlue,bookmarksopen=true]{hyperref}
 \usepackage{enumitem}
 \usepackage{soul}
 \usepackage{fontawesome7}
 \usepackage{newunicodechar}
+
+\hypersetup{
+  pdftitle={Schrute Dwight CV},
+}
 
 \setlist[itemize]{noitemsep,topsep=0pt}
 
@@ -25,6 +29,11 @@
 % &thinsp;
 \DeclareUnicodeCharacter{2009}{\,}
 
+% prevent garbage characters from font awesome icons
+% in text extracted from pdf
+\pdfglyphtounicode{envelope}{0020}
+\pdfglyphtounicode{phone}{0020}
+
 \renewcommand{\cvfirstname}{Dwight}
 
 \renewcommand{\cvlastname}{Schrute}
@@ -34,6 +43,8 @@
 \cvheader
 
 \vspace{\baselineskip}
+
+\pdfbookmark[0]{About}{name2}
 
 \cvsection{About}%
 \cvmain{
@@ -59,6 +70,8 @@ that?} And if they would, I~do not do that thing.
 
 \vspace{\baselineskip}
 
+\pdfbookmark[0]{Traits}{name6}
+
 \cvsection{Traits}
 
 \cvmain{
@@ -68,6 +81,8 @@ hardworking, alpha male, jackhammer, merciless, insatiable
 }
 
 \vspace{\baselineskip}
+
+\pdfbookmark[0]{Experience}{name8}
 
 \cvsection{Experience}
 
@@ -151,6 +166,8 @@ was one of the top sellers of the company.
 }
 
 \vspace{\baselineskip}
+
+\pdfbookmark[0]{Education}{name20}
 
 \cvsection{Education}
 
