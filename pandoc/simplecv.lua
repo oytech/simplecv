@@ -85,7 +85,7 @@ if FORMAT:match 'latex' then
         for i, el in ipairs(doc.blocks) do
             -- insert "content" wrapped in cvmain immediately after cvhints
             -- to render side by side in pdf
-            if is_hint(prev) and is_content(el) then
+            if is_hint(prev) and (is_content(el) or is_main(el)) then
                 table.append(hblocks, {
                     pandoc.RawBlock("latex", "\\cvhints{"),
                     prev,
