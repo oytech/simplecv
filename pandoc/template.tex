@@ -35,6 +35,7 @@ $endif$
 
 % prevent garbage characters from font awesome icons
 % in text extracted from pdf
+% https://github.com/braniii/fontawesome/issues/29
 $for(icons)$
 \pdfglyphtounicode{$icons$}{0020}
 $endfor$
