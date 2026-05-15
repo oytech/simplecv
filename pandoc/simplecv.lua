@@ -25,6 +25,16 @@ function table:contains(elem)
     return false
 end
 
+function table:keys()
+    assert(type(self) == "table")
+
+    local keys = {}
+    for key, _ in pairs(self) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
 function is_fenced_div(el, class)
     return el.t == "Div" and el.classes[1] == class
 end
@@ -56,14 +66,13 @@ if FORMAT:match 'latex' then
         local text = str.text
         if text:starts_with(":") and text:ends_with(":") and #text > 2 then
             local icon = text:sub(2, -2)
+            local el = pandoc.RawInline("latex", "\\faIcon{" .. icon .. "}")
             if icon:starts_with("regular-") then
                 icon = icon:sub(9, #icon)
-                table.insert(ICONS, icon)
-                return pandoc.RawInline("latex", "\\faIcon[regular]{" .. icon .. "}")
-            else
-                table.insert(ICONS, icon)
-                return pandoc.RawInline("latex", "\\faIcon{" .. icon .. "}")
+                el = pandoc.RawInline("latex", "\\faIcon[regular]{" .. icon .. "}")
             end
+            ICONS[icon] = true
+            return el
         end
         return str
     end
@@ -143,7 +152,7 @@ if FORMAT:match 'latex' then
             end
             prev = el
         end
-        doc.meta["icons"] = pandoc.MetaList(ICONS)
+        doc.meta["icons"] = pandoc.MetaList(table.keys(ICONS))
         return pandoc.Pandoc(hblocks, doc.meta)
     end
 
