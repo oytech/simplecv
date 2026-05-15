@@ -1,17 +1,19 @@
+name := "example"
+
 # translate example.md into latex and then generate pdf
 default: tex pdf
 
 # generate pdf from example.tex
 pdf:
-    pdflatex example.tex
+    pdflatex {{name}}.tex
 
 # print pdf to png image
 png:
-    pdftoppm example.pdf example -png -f 1 -singlefile -r 300
+    pdftoppm {{name}}.pdf {{name}} -png -f 1 -singlefile -r 300
 
 # extract and print plain text from pdf
 txt:
-    pdftotext example.pdf -
+    pdftotext {{name}}.pdf -
 
 # generate example.tex from example.md using pandoc
 tex:
@@ -20,7 +22,7 @@ tex:
         -t latex \
         --template=pandoc/template.tex \
         --lua-filter=pandoc/simplecv.lua \
-        example.md -o example.tex
+        {{name}}.md -o {{name}}.tex
 
 # print pandoc AST parsed from example.md
 ast:
@@ -30,4 +32,4 @@ ast:
         --template=pandoc/template.tex \
         --lua-filter=pandoc/simplecv.lua \
         --wrap=preserve \
-        example.md
+        {{name}}.md
