@@ -60,6 +60,72 @@ if not pandoc then pandoc = {} end
 
 if FORMAT:match 'latex' then
 
+    -- wrap element in latex command
+    function block(name, el)
+        assert(type(name) == "string")
+        return {
+            pandoc.RawBlock("latex", "\\" .. name .. "{"),
+            el,
+            pandoc.RawBlock("latex", "}")
+        }
+    end
+
+    function icon(name, is_regular)
+        if is_regular then
+            return pandoc.RawInline("latex", "\\faIcon[regular]{" .. name .. "}")
+        else
+            return pandoc.RawInline("latex", "\\faIcon{" .. name .. "}")
+        end
+    end
+
+    -- insert "content" wrapped in cvmain immediately after cvhints to render side by side in pdf
+    function columns(hints, main)
+        return {
+            pandoc.RawBlock("latex", "\\cvhints{"),
+            hints,
+            pandoc.RawBlock("latex", "}%\n\\cvmain{"),
+            main,
+            pandoc.RawBlock("latex", "}")
+        }
+    end
+
+    function spacing()
+        return pandoc.RawBlock("latex", "\\vspace{\\baselineskip}")
+    end
+
+    -- TODO move spacing and pdfbookmark to latex document class in simplecv.cls
+    function top_heading(el, id)
+        local heading = pandoc.utils.stringify(el)
+        return {
+            spacing(),
+            pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. id .. "}"),
+            pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}")
+        }
+    end
+
+    -- insert cvmain immediately after heading wrapped in cvsection to render side by side in pdf
+    function top_heading_with(el, id, main)
+        local heading = pandoc.utils.stringify(el)
+        return {
+            spacing(),
+            pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. id .. "}"),
+            pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}%\n\\cvmain{"),
+            main,
+            pandoc.RawBlock("latex", "}")
+        }
+    end
+
+    function other_heading(el)
+        return {
+            pandoc.RawBlock("latex", "\\cvmain{{\\large"),
+            el.content,
+            pandoc.RawBlock("latex", "}}")
+        }
+    end
+end
+
+if FORMAT:match 'latex' then
+
     ICONS = {}
 
     -- support syntax :icon: for inserting fontawesome icons:
@@ -68,66 +134,33 @@ if FORMAT:match 'latex' then
     function Str(str)
         local text = str.text
         if text:starts_with(":") and text:ends_with(":") and #text > 2 then
-            local icon = text:sub(2, -2)
-            local el = pandoc.RawInline("latex", "\\faIcon{" .. icon .. "}")
-            if icon:starts_with("regular-") then
-                icon = icon:sub(9, #icon)
-                el = pandoc.RawInline("latex", "\\faIcon[regular]{" .. icon .. "}")
+            local name = text:sub(2, -2)
+            local is_regular = name:starts_with("regular-")
+            if is_regular then
+                name = name:sub(9, #name)
             end
-            ICONS[icon] = true
-            return el
+            ICONS[name] = true
+            return icon(name, is_regular)
         end
         return str
     end
 
     function Pandoc(doc)
-        -- wrap element in latex command
-        local function wrap(cmd, el)
-            assert(type(cmd) == "string")
-            return {
-                pandoc.RawBlock("latex", "\\" .. cmd .."{"),
-                el,
-                pandoc.RawBlock("latex", "}")
-            }
-        end
-
         local hblocks = {}
         -- assign dummy element to eliminate nil checks
         local prev = {t = "dummy"}
         for i, el in ipairs(doc.blocks) do
-            -- insert "content" wrapped in cvmain immediately after cvhints
-            -- to render side by side in pdf
             if is_hint(prev) and (is_content(el) or is_main(el)) then
-                table.append(hblocks, {
-                    pandoc.RawBlock("latex", "\\cvhints{"),
-                    prev,
-                    pandoc.RawBlock("latex", "}%\n\\cvmain{"),
-                    el,
-                    pandoc.RawBlock("latex", "}")
-                })
-            -- insert cvmain immediately after header wrapped in cvsection
-            -- to render side by side in pdf
+                table.append(hblocks, columns(prev, el))
             elseif is_top_heading(prev) and is_main(el) then
-                local heading = pandoc.utils.stringify(prev)
-                table.append(hblocks, {
-                    pandoc.RawBlock("latex", "\\vspace{\\baselineskip}"),
-                    pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. i .. "}"),
-                    pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}%\n\\cvmain{"),
-                    el,
-                    pandoc.RawBlock("latex", "}")
-                })
+                table.append(hblocks, top_heading_with(prev, i, el))
             else
                 -- first process elements that could possibly
                 -- be skipped in previous iteration and not "merged" above
                 if is_hint(prev) then
-                    table.append(hblocks, wrap("cvhints", prev))
+                    table.append(hblocks, block("cvhints", prev))
                 elseif is_top_heading(prev) then
-                    local heading = pandoc.utils.stringify(prev)
-                    table.append(hblocks, {
-                        pandoc.RawBlock("latex", "\\vspace{\\baselineskip}"),
-                        pandoc.RawBlock("latex", "\\pdfbookmark[0]{" .. heading .. "}{name" .. i .. "}"),
-                        pandoc.RawBlock("latex", "\\cvsection{" .. heading .. "}")
-                    })
+                    table.append(hblocks, top_heading(prev, i))
                 end
 
                 if is_top_heading(el) or is_hint(el) then
@@ -138,23 +171,20 @@ if FORMAT:match 'latex' then
                     -- (additional space is not needed then because
                     -- level 1 header is in different column)
                     if prev.t ~= "Header" and prev.level ~= 1 then
-                        table.insert(hblocks, pandoc.RawBlock("latex", "\\vspace{\\baselineskip}"))
+                        table.insert(hblocks, spacing())
                     end
-                    table.append(hblocks, {
-                        pandoc.RawBlock("latex", "\\cvmain{{\\large"),
-                        el.content,
-                        pandoc.RawBlock("latex", "}}")
-                    })
+                    table.append(hblocks, other_heading(el))
                 elseif is_content(el) then
-                    table.append(hblocks, wrap("cvmain", el))
+                    table.append(hblocks, block("cvmain", el))
                 elseif is_footer(el) then
-                    table.append(hblocks, wrap("cvfooter", el))
+                    table.append(hblocks, block("cvfooter", el))
                 else
                     table.insert(hblocks, el)
                 end
             end
             prev = el
         end
+        -- TODO sort to force consistent order
         doc.meta["icons"] = pandoc.MetaList(table.keys(ICONS))
         return pandoc.Pandoc(hblocks, doc.meta)
     end
