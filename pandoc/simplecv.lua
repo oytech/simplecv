@@ -55,6 +55,9 @@ function is_top_heading(el) return el.t == "Header" and el.level == 1 end
 
 function is_other_heading(el) return el.t == "Header" and el.level ~= 1 end
 
+-- silence Lua Diagnostics
+if not pandoc then pandoc = {} end
+
 if FORMAT:match 'latex' then
 
     ICONS = {}
