@@ -57,8 +57,9 @@ function is_other_heading(el) return el.t == "Header" and el.level ~= 1 end
 
 -- silence Lua Diagnostics
 if not pandoc then pandoc = {} end
+if not FORMAT then FORMAT = "" end
 
-if FORMAT:match 'latex' then
+if FORMAT == 'latex' then
 
     -- wrap element in latex command
     function block(name, el)
@@ -124,7 +125,63 @@ if FORMAT:match 'latex' then
     end
 end
 
-if FORMAT:match 'latex' then
+if FORMAT == 'typst' then
+
+    function block(name, el)
+        assert(type(name) == "string")
+        return {
+            pandoc.RawBlock("typst", "#" .. name .. "["),
+            el,
+            pandoc.RawBlock("typst", "]")
+        }
+    end
+
+    function icon(name, is_regular)
+        if is_regular then
+            return pandoc.RawInline("typst", "#fa-icon(\"".. name .."\")")
+        else
+            return pandoc.RawInline("typst", "#fa-icon(\"".. name .."\", solid: true)")
+        end
+    end
+
+    function columns(hints, main)
+        return {
+            pandoc.RawBlock("typst", "#cols["),
+            hints,
+            pandoc.RawBlock("typst", "]["),
+            main,
+            pandoc.RawBlock("typst", "]")
+        }
+    end
+
+    function spacing()
+        return nil
+    end
+
+    function top_heading(el, _)
+        return { el }
+    end
+
+    function top_heading_with(el, _, main)
+        return {
+            pandoc.RawBlock("typst", "#cols(hints-align: left)["),
+            el,
+            pandoc.RawBlock("typst", "]["),
+            main,
+            pandoc.RawBlock("typst", "]")
+        }
+    end
+
+    function other_heading(el)
+        return {
+            pandoc.RawBlock("typst", "#cvmain[#text(12pt)["),
+            el.content,
+            pandoc.RawBlock("typst", "]]")
+        }
+    end
+end
+
+if FORMAT == 'latex' or FORMAT == 'typst' then
 
     ICONS = {}
 

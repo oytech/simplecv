@@ -24,6 +24,20 @@ tex:
         --lua-filter=pandoc/simplecv.lua \
         {{name}}.md -o {{name}}.tex
 
+# generate example.typ from example.md using pandoc
+typst:
+    pandoc \
+        -f commonmark+fenced_divs+yaml_metadata_block \
+        -t typst \
+        --template=pandoc/template.typ \
+        --lua-filter=pandoc/simplecv.lua \
+        {{name}}.md -o {{name}}.typ
+
+pdf-typst:
+    # TODO detect that path? instead of hardcoded
+    typst compile {{name}}.typ {{name}}.typ.pdf \
+        --font-path /opt/local/share/texmf-texlive/fonts/opentype
+
 # print pandoc AST parsed from example.md
 ast:
     pandoc \
