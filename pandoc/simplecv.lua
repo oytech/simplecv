@@ -184,8 +184,8 @@ if FORMAT:match 'latex' then
             end
             prev = el
         end
-        -- TODO sort to force consistent order
         doc.meta["icons"] = pandoc.MetaList(table.keys(ICONS))
+        doc.meta["icons"]:sort()
         return pandoc.Pandoc(hblocks, doc.meta)
     end
 
